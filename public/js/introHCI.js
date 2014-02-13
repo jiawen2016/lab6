@@ -25,14 +25,31 @@ function addProjectDetails(e) {
 	var projectID = $(this).closest('.project').attr('id');
 	// get rid of 'project' from the front of the id 'project3'
 	var idNumber = projectID.substr('project'.length);
+	$.get("project/"+idNumber,getData );
 
 	console.log("User clicked on project " + idNumber);
 }
-
+function getData(result){
+	console.log(result);
+	var projectHTML = '<img src="'+result['image']+'" class="detailsImage">'+'<h4>'+result['title']+'</h4>'+'<p><small>'+result['date']+'</small></p>'+result['summary'];
+	//id: 4, title: "Heuristic Evaluation", date: "January 30", summary: "<p>As Carolyn Snyder writes, 'Paper prototyping is… the feedback you need to begin implementing.</p>", image: "http://searchwide.com/wp-content/uploads/2013/11/evaluation.jpg"
+	$("#project"+result['id']+" .details").html(projectHTML);
+}
 /*
  * Make an AJAX call to retrieve a color palette for the site
  * and apply it
  */
 function randomizeColors(e) {
 	console.log("User clicked on color button");
+	$.get("/palette",changeColor);
+}
+function changeColor(result){
+	console.log(result);
+	var colors=result['colors']['hex'];
+	$('body').css('background-color', colors[0]);
+	$('.thumbnail').css('background-color', colors[1]);
+	$('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+	$('p').css('color', colors[3]);
+	$('.project img').css('opacity', .75);
+
 }
